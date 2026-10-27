@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Office</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%238b5a2b'/><rect x='3' y='3' width='10' height='7' fill='%230f1b33'/><rect x='4' y='4' width='5' height='1' fill='%237dd3fc'/><rect x='4' y='6' width='7' height='1' fill='%23a7f3d0'/><rect x='6' y='11' width='4' height='2' fill='%232b2f3a'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <h1>Agent Office</h1>
+    </div>
+    <nav class="counts" id="counts" aria-label="Status summary"></nav>
+    <div class="tools">
+      <div class="kind-filter" id="kindFilter" role="group" aria-label="Filter by agent">
+        <button data-kind="all" class="on">All</button>
+        <button data-kind="claude">Claude</button>
+        <button data-kind="codex">Codex</button>
+        <button data-kind="cursor">Cursor</button>
+      </div>
+      <button class="icon-btn" id="alertsBtn" title="Alert me when an agent needs me or finishes">🔕 Alerts off</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="office-panel" aria-label="Office floor">
+      <div class="office-scroll" id="officeScroll">
+        <div class="office-wrap" id="officeWrap">
+          <canvas id="office"></canvas>
+          <div class="overlay" id="overlay"></div>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i class="dot needs_you"></i>Needs you</span>
+        <span><i class="dot working"></i>Working</span>
+        <span><i class="dot done"></i>Done</span>
+        <span><i class="dot stopped"></i>Stopped</span>
+        <span><i class="dot error"></i>Error</span>
+        <span><i class="dot archived"></i>Archived (back room)</span>
+        <span class="muted">Zz = idle over 1 hour · small robots = helper agents</span>
+      </div>
+    </section>
+
+    <aside class="roster" aria-label="Agent list">
+      <input type="search" id="search" placeholder="Search tasks, projects…" autocomplete="off">
+      <div id="groups"></div>
+      <p class="foot muted" id="foot"></p>
+    </aside>
+  </main>
+
+  <div class="drawer-backdrop" id="backdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Agent details">
+    <div class="drawer-head">
+      <div>
+        <div class="drawer-kind" id="dKind"></div>
+        <h2 id="dTitle"></h2>
+      </div>
+      <button class="icon-btn" id="dClose" aria-label="Close">✕</button>
+    </div>
+    <div class="drawer-status" id="dStatus"></div>
+    <dl class="facts" id="dFacts"></dl>
+    <div class="resume" id="dResume"></div>
+    <h3>Recent conversation</h3>
+    <div class="transcript" id="dTranscript"></div>
+  </aside>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="office.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "agent-office",
+  "version": "1.0.0",
+  "description": "Read-only pixel-art office showing your local Claude Code, Codex and Cursor agents and whether they need you.",
+  "private": true,
+  "license": "MIT",
+  "main": "server.js",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --no-warnings server.js"
+  }
+}
