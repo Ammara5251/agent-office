@@ -67,7 +67,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* ---------- layout ---------- */
 .layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px; padding: 16px; align-items: start; }
 .office-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
-.office-scroll { overflow: auto; max-height: calc(100vh - 150px); }
+.office-scroll { overflow: auto; max-height: calc(100vh - 150px); scrollbar-gutter: stable; }
 .office-wrap { position: relative; margin: 0 auto; }
 #office { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
 .overlay { position: absolute; inset: 0; pointer-events: none; }

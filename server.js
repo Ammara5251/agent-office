@@ -634,5 +634,5 @@ http.createServer((req, res) => {
   });
 }).listen(PORT, HOST, () => {
   console.log(`Agent Office running (archive after ${ARCHIVE_DAYS} days idle)`);
-  console.log(`Open: http://localhost:${PORT}/?key=${KEY}`);
+  console.log(`Open: ${(process.env.PUBLIC_URL || `http://localhost:${PORT}`).replace(/\/$/, '')}/?key=${KEY}`);
 });

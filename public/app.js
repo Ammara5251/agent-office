@@ -191,6 +191,7 @@
       html += `<div class="box-more" style="left:${(L.floorW + 8) * s}px;top:${(last.y + 13) * s}px">+${L.overflow} more</div>`;
     }
     $('overlay').innerHTML = html;
+    Office.draw(cv, L, now); // keep pixels in sync with the overlay immediately
   }
 
   function renderRoster(list, now) {
@@ -324,7 +325,11 @@
     if (state.alerts) beep(660);
     store.set('alerts', state.alerts); syncAlertsBtn();
   };
-  new ResizeObserver(() => render()).observe($('officeScroll'));
+  let lastWidth = 0;
+  new ResizeObserver(() => {
+    const w = $('officeScroll').clientWidth;
+    if (w !== lastWidth) { lastWidth = w; render(); }
+  }).observe($('officeScroll'));
 
   // ---------- loops ----------
   let lastFrame = 0;
