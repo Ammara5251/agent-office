@@ -1,0 +1,22 @@
+# systemd user service for Agent Office (Linux).
+# Install: see "Start on boot" in README.md. Edit WorkingDirectory/ExecStart if the repo isn't at ~/agent-office.
+[Unit]
+Description=Agent Office (read-only AI agent dashboard)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/agent-office
+ExecStart=/usr/bin/env node --no-warnings %h/agent-office/server.js
+# Restart also covers boot races, e.g. the Tailscale IP not existing yet when HOST is set to it.
+Restart=always
+RestartSec=5
+Environment=PORT=3004
+Environment=HOST=127.0.0.1
+# For Tailscale access, use your machine's Tailscale IP instead:
+# Environment=HOST=100.x.y.z
+# Environment=PUBLIC_URL=http://100.x.y.z:3004
+
+[Install]
+WantedBy=default.target

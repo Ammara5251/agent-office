@@ -64,6 +64,54 @@ as a cookie, so later visits to `http://localhost:3004` just work.
 
 Windows: `set PORT=3010 && run.cmd`. Linux/macOS: `PORT=3010 ./run.sh`.
 
+## Start on boot
+
+### Linux (systemd user service)
+
+1. Copy the unit file:
+   ```
+   mkdir -p ~/.config/systemd/user
+   cp deploy/agent-office.service ~/.config/systemd/user/
+   ```
+2. Edit `~/.config/systemd/user/agent-office.service`:
+   - If the repo isn't at `~/agent-office`, change the path in `WorkingDirectory` and `ExecStart`.
+   - For Tailscale access, set `HOST` (and `PUBLIC_URL`) to your Tailscale IP.
+3. Enable and start it:
+   ```
+   systemctl --user daemon-reload
+   systemctl --user enable --now agent-office
+   ```
+4. Let it start at boot without logging in (one time):
+   ```
+   sudo loginctl enable-linger $USER
+   ```
+5. Get your link: `journalctl --user -u agent-office | grep Open:`
+
+Day to day: `systemctl --user status|restart|stop agent-office`, logs with
+`journalctl --user -u agent-office -f`. To remove it: `systemctl --user disable --now agent-office`.
+
+### Windows (Task Scheduler)
+
+Run this in a normal (non-admin) Command Prompt. Change the path to where you cloned the repo:
+
+```
+schtasks /Create /TN "Agent Office" /SC ONLOGON /RL LIMITED /TR "cmd /c cd /d C:\path\to\agent-office && run.cmd"
+```
+
+- For Tailscale access, put the settings before `run.cmd`:
+  `... /TR "cmd /c cd /d C:\path\to\agent-office && set HOST=100.x.y.z&& set PUBLIC_URL=http://100.x.y.z:3004&& run.cmd"`
+- It starts when you log in. That's when your agents run too, since they live in your user profile.
+- Start it now without logging out: `schtasks /Run /TN "Agent Office"`.
+- Remove it: `schtasks /Delete /TN "Agent Office" /F`.
+- The console window must stay open. To hide it, open Task Scheduler → *Agent Office* →
+  *Properties* and pick "Run whether user is logged on or not".
+- Your link is printed in that window. The key is also saved in
+  `%USERPROFILE%\.config\agent-office\key`, so the link is `http://localhost:3004/?key=<that key>`.
+
+### macOS (launchd)
+
+Not set up yet. For now, run `./run.sh` from a terminal, or add it under System Settings → General → Login Items.
+
 ## What it reads
 
 | Agent | Location (under your home folder) | Notes |
@@ -103,5 +151,6 @@ isn't readable from here. That's why inactivity is used instead.
 server.js        scanner + API (Node built-ins only)
 public/office.js pixel-art renderer (canvas)
 public/app.js    UI: counts, list, details drawer, alerts
+deploy/          systemd unit
 docs/            screenshots
 ```
